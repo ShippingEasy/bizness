@@ -20,6 +20,8 @@ end
 require "bizness/configuration"
 require "bizness/context"
 require "bizness/operation"
+require "bizness/failure"
+require "bizness/subscriber"
 require "bizness/filters/base_filter"
 require "bizness/filters/active_record_transaction_filter"
 require "bizness/filters/event_filter"
