@@ -1,16 +1,20 @@
 class Bizness::Operation
   extend Forwardable
 
-  def_delegators :context, :successful?
+  def_delegators :context, :error, :successful?
 
   attr_reader :context
 
   def initialize(context = {})
-    @context = Bizness::Context.new(context)
+    @context = context.is_a?(Bizness::Context) ? context : Bizness::Context.new(context)
   end
 
   def self.filters
     Bizness.filters
+  end
+
+  def self.call!(context = {})
+    new(context).call!
   end
 
   def call!
@@ -30,7 +34,7 @@ class Bizness::Operation
 
   def execute_filtered_operation!
     filtered_operation.call
-    raise Failure, context unless successful?
+    raise Bizness::Failure, context.error unless successful?
   rescue => e
     context.error = e.message
   end
