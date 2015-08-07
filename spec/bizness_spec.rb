@@ -1,11 +1,9 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Bizness do
-  it 'has a version number' do
-    expect(Bizness::VERSION).not_to be nil
-  end
-
-  it 'does something useful' do
-    expect(false).to eq(true)
+  describe ".filters" do
+    it "delegates to the configuration" do
+      expect(Bizness.filters).to eq(Bizness.configuration.filters)
+    end
   end
 end
