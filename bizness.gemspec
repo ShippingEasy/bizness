@@ -6,12 +6,11 @@ require 'bizness/version'
 Gem::Specification.new do |spec|
   spec.name          = "bizness"
   spec.version       = Bizness::VERSION
-  spec.authors       = ["Theo Mills"]
-  spec.email         = ["twmills@twmills.com"]
+  spec.authors       = ["ShippingEasy"]
+  spec.email         = ["dev@shippingeasy.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = "Get your bizness right and organize your business logic into operations."
+  spec.homepage      = ""
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
