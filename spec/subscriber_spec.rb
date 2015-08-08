@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Bizness::Subscriber do
-  let(:event_name) { "operations:cancel_account:succeeded" }
+  let(:event_name) { "cancel_account:succeeded" }
 
   before do
     MockOperation.extend(Bizness::Subscriber)
