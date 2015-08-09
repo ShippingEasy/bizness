@@ -6,7 +6,7 @@ class Bizness::Operation
   attr_reader :context
 
   def initialize(context = {})
-    @context = context.is_a?(Bizness::Context) ? context : Bizness::Context.new(context)
+    @context = Bizness::Context.new(context.to_h)
   end
 
   def self.filters
