@@ -3,7 +3,6 @@ module Bizness::Filters
     def call
       ActiveRecord::Base.transaction(requires_new: true) do
         filtered_operation.call
-        raise ActiveRecord::Rollback unless successful?
       end
     end
   end
