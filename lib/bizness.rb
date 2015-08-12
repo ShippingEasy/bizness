@@ -16,12 +16,15 @@ module Bizness
   def self.filters
     configuration.filters
   end
+
+  def self.run(operation = nil, filters: self.filters, &block)
+    operation = block if block_given?
+    filters.reduce(operation) { |filtered_op, filter| filter.new(filtered_op) }.call
+  end
 end
 
 require "bizness/configuration"
-require "bizness/context"
 require "bizness/operation"
-require "bizness/failure"
 require "bizness/subscriber"
 require "bizness/filters/base_filter"
 require "bizness/filters/active_record_transaction_filter"
