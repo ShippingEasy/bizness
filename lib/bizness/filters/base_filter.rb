@@ -5,10 +5,6 @@ module Bizness::Filters
       super(operation)
     end
 
-    def self.wrap(collection)
-      collection.map { |object| new(object) }
-    end
-
     private
 
     attr_reader :__original_operation__
