@@ -68,7 +68,7 @@ end
 
 ### The Operation class
 
-Though you don't need to use the Bizness::Operation class to define an operation, one is provided as a convenience. This class has several methods that make calling operations and running them through the pipeline more intuitive.
+Though you don't need to use the `Bizness::Operation` class to define an operation, one is provided as a convenience. This class has several methods that make calling operations and running them through the pipeline more intuitive.
 
 For example:
 
