@@ -105,7 +105,7 @@ For example, if your operation requires a model to initialize:
 class SendWelcomeEmailOperation
   extend Bizness::Subscriber
 
-  subscribe(“operations.registration_complete”) do |event_data|
+  subscribe(“operations:registration_complete:succeeded”) do |event_data|
     customer = Customer.find(event_data[:customer_id])
     new(customer: customer)
   end
@@ -124,7 +124,7 @@ If no block is passed, the attributes from the event payload will be used direct
 class SendWelcomeEmailOperation
   extend Bizness::Subscriber
 
-  subscribe(“operations.registration_complete”)
+  subscribe(“operations:registration_complete:succeeded”)
 
   def initialize(customer_id:)
     @customer = Customer.find(customer_id)
