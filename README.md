@@ -23,15 +23,15 @@ Or install it yourself as:
 ## Why use this?
 
 First of all, you need to buy into the idea that ActiveRecord is an egregious violator of the Single Responsibility Principle.
-Breaking out its responsibilities into separate objects, such as Query, Policy, Form and Service objects, has been a trend for some time now. These objects allow you to better organize and isolate your business logic, leading to faster design turn-around and better testing. You spend less time wondering how a feature's set of classes should be organized and more time addressing the needs of your domain.
+Breaking out its responsibilities into separate objects, such as Query, Policy, Form and Service objects, has been a trend for some time now. These objects allow you to better organize and isolate your business logic, leading to faster design and better testing. You spend less time wondering how a feature's classes should be organized and more time addressing the needs of your domain.
 
 ShippingEasy adopted this strategy, but we opted to use the term Operation rather than the nebulous term "Service Object" (or Interactor for that matter).
 
-As we wrote more and more operations, some trends emerged:
+As we wrote more and more operations, some insights emerged:
 
   1. We always ran an operation in a transaction
   2. An operation nearly always corresponded to an important system event ("Complete Registration")
-  3. Logging these events into a dashboard like Kibana provided us with valuable metrics and insight into how our system was performing at a business logic level
+  3. Logging these events into a dashboard like Kibana could provide us with valuable metrics and insight into how our system was performing at a business logic level
 
 Bizness, therefore, allows you to create PORO operation objects and easily augment their business logic execution via a series of filters. Out of the box there are filters to wrap every operation in a transaction as well as automatically broadcasting every operation as a series of events.
  A filter is just a SimpleDelegator, so it's easy to create your own. Moving these responsbilities out of your operation classes keeps them lean and focused, and in the case of the event filters, automatically instruments every important business operation in your codebase (depending on how widely you adopt them).
