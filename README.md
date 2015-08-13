@@ -95,7 +95,7 @@ Automatically publishing operations as events via the `EventFilter` is one of th
 
 #### Subscribing
 
-Once an operation is publishing events, we wanted to make it easy for other operations to subscribe to those events. To wire up a class to easily subscribe to these events, simple extend the `Bizness::Subscriber` module. That gives your class access to the `subscribe` method.
+Once an operation is publishing events, we wanted to make it easy for other operations to subscribe to those events. To wire up a class to easily subscribe to these events, simply extend the `Bizness::Subscriber` module. That gives your class access to the `subscribe` method.
 
 You can use the `subscribe` method in one of two ways: with or without a block. You can use the block as a builder for your operation, translating the values coming in from the message into the arguments necessary to initialize your operation. You should always return an initialized operation from this block.
 
