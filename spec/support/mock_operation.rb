@@ -1,4 +1,6 @@
-class MockOperation < Bizness::Operation
+class MockOperation
+  include Bizness::Operation
+
   attr_reader :foo
   attr_accessor :custom_message
 
