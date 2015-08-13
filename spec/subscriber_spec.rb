@@ -1,11 +1,12 @@
 require "spec_helper"
 
 describe Bizness::Subscriber do
-  let(:event_name) { "cancel_account:succeeded" }
   let!(:widget) { Widget.create(name: "Foo") }
 
   describe ".subscribe" do
     context "when configured with a block" do
+      let(:event_name) { "cancel_account1:succeeded" }
+
       before do
         MockDataOperation.extend(Bizness::Subscriber)
         MockDataOperation.subscribe(event_name) do |event_data|
@@ -21,6 +22,8 @@ describe Bizness::Subscriber do
     end
 
     context "when not configured with a block" do
+      let(:event_name) { "cancel_account2:succeeded" }
+
       before do
         MockOperation.extend(Bizness::Subscriber)
         MockOperation.subscribe(event_name)
