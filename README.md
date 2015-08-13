@@ -86,7 +86,18 @@ op.to_h
 
 ### Pubsub
 
-The subscriber module has been updated to take a block. You can use the block as a builder for your operation, translating the values coming in from the message into the parameters necessary to initialize your operation. You should always return an initialized operation from this block.
+#### Publishing
+
+Automatically publishing operations as events via the EventFilter is one of the primary reasons we developed Bizness. The EventFilter will always publish two events. For example, if your operation class is named "CompleteRegistrationOperation", these events will be published:
+
+  * "operations:complete_registration:executed" - This event includes the start time, end time and duration of the operation
+  * "operations:complete_registration:succeeded" or "operations:complete_registration:failed" depending on if an exception was raised or not
+
+#### Subscribing
+
+Once an operation is publishing events, we wanted to make it easy for other operations to subscribe to those events. To wire up a class to easily subscribe to these events, simple extend the `Bizness::Subscriber` module. That gives your class access to the `subscribe` method.
+
+You can use the `subscribe` method in one of two ways: with or without a block. You can use the block as a builder for your operation, translating the values coming in from the message into the arguments necessary to initialize your operation. You should always return an initialized operation from this block.
 
 For example, if your operation requires a model to initialize:
 
@@ -107,6 +118,21 @@ class SendWelcomeEmailOperation
 end
 ```
 
+If no block is passed, the attributes from the event payload will be used directly to initialize and execute your operations:
+
+```ruby
+class SendWelcomeEmailOperation
+  extend Bizness::Subscriber
+
+  subscribe(“operations.registration_complete”)
+
+  def initialize(customer_id:)
+    @customer = Customer.find(customer_id)
+  end
+
+  # …. omitted for brevity
+end
+```
 
 ## Contributing
 
