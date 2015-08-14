@@ -2,11 +2,10 @@ require "spec_helper"
 
 describe Bizness::Subscriber do
   let!(:widget) { Widget.create(name: "Foo") }
+  let(:event_name) { "cancel_account:succeeded" }
 
   describe ".subscribe" do
     context "when configured with a block" do
-      let(:event_name) { "cancel_account1:succeeded" }
-
       before do
         MockDataOperation.extend(Bizness::Subscriber)
         MockDataOperation.subscribe(event_name) do |event_data|
@@ -16,22 +15,20 @@ describe Bizness::Subscriber do
       end
 
       it "executes the operation if the subscribed event is broadcasted" do
-        expect_any_instance_of(MockDataOperation).to receive(:call!)
         Hey.publish!(event_name, { widget_id: widget.id } )
+        expect(Widget.last.name).to eq("Boo")
       end
     end
 
     context "when not configured with a block" do
-      let(:event_name) { "cancel_account2:succeeded" }
-
       before do
-        MockOperation.extend(Bizness::Subscriber)
-        MockOperation.subscribe(event_name)
+        MockDataOperation2.extend(Bizness::Subscriber)
+        MockDataOperation2.subscribe(event_name)
       end
 
       it "executes the operation if the subscribed event is broadcasted" do
-        expect(MockOperation).to receive(:new).with(foo: "baz").and_call_original
-        Hey.publish!(event_name, { foo: "baz" } )
+        Hey.publish!(event_name, { widget_id: widget.id } )
+        expect(Widget.last.name).to eq("Boo")
       end
     end
   end

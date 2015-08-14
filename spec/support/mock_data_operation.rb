@@ -1,5 +1,4 @@
-class MockDataOperation
-  include Bizness::Operation
+class MockDataOperation < Bizness::Operation
 
   attr_reader :widget
 
@@ -8,7 +7,7 @@ class MockDataOperation
   end
 
   def call
-    widget.update_column :name, SecureRandom.hex
+    widget.update_column :name, "Boo"
   end
 
   def to_h
