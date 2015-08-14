@@ -5,7 +5,6 @@ require "hey"
 
 module Bizness
   def self.configure
-    Hey.configuration.namespace = "operations"
     yield(configuration)
   end
 
