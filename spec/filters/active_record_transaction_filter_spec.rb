@@ -12,10 +12,9 @@ describe Bizness::Filters::ActiveRecordTransactionFilter do
   context "when failed" do
     it "rolls back the transaction" do
       op = MockOperation.new(foo: "bar")
-      allow(op).to receive(:call) { Widget.new.save! }
-      op.fail!(error: "oops")
+      allow(op).to receive(:call).and_raise("Oops")
       filter = Bizness::Filters::ActiveRecordTransactionFilter.new(op)
-      filter.call
+      begin; filter.call; rescue; end
       expect(Widget.all).to be_empty
     end
   end

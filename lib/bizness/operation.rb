@@ -1,46 +1,32 @@
-class Bizness::Operation
-  extend Forwardable
-
-  def_delegators :context, :error, :successful?
-
-  attr_reader :context
-
-  def initialize(context = {})
-    @context = Bizness::Context.new(context.to_h)
-  end
-
-  def self.filters
-    Bizness.filters
-  end
-
-  def self.call!(context = {})
-    new(context).call!
-  end
+module Bizness::Operation
+  attr_reader :error
 
   def call!
-    execute_filtered_operation!
-    context
+    run
+    successful?
   end
 
   def call
     raise NotImplementedError
   end
 
-  def fail!(error:)
-    context.error = error
+  def successful?
+    error.nil?
   end
+
+  def to_h
+    {}
+  end
+
+  protected
+
+  attr_writer :error
 
   private
 
-  def execute_filtered_operation!
-    filtered_operation.call
-    raise Bizness::Failure, context.error unless successful?
+  def run
+    Bizness.run(self)
   rescue => e
-    context.error = e.message
-  end
-
-  def filtered_operation
-    return self if self.class.filters.empty?
-    self.class.filters.reduce(self) { |filtered_op, filter| filter.new(filtered_op) }
+    self.error = e.message
   end
 end
