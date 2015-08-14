@@ -1,4 +1,4 @@
-class Bizness::Operation
+module Bizness::Operation
   attr_reader :error
 
   def call!

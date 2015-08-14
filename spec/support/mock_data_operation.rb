@@ -1,4 +1,5 @@
-class MockDataOperation < Bizness::Operation
+class MockDataOperation
+  include Bizness::Operation
 
   attr_reader :widget
 
