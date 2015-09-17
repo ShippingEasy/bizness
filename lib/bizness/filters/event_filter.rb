@@ -13,7 +13,7 @@ module Bizness::Filters
     def evented_call
       result = filtered_operation.call
       Hey.publish!(successful? ? "succeeded" : "aborted", payload(result))
-    rescue => e
+    rescue Exception => e
       Hey.publish!("aborted", payload.merge(error: e.message, stacktrace: e.backtrace, exception: e.class.name))
       raise e
     end
