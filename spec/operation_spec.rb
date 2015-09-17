@@ -27,19 +27,33 @@ describe Bizness::Operation do
     end
   end
 
-  describe "#successful?" do
+  describe "#successful?, #aborted" do
     context "when error is set" do
-      it "returns false" do
+      before do
         allow(subject).to receive(:call).and_raise("Oops")
         subject.call!
+      end
+
+      it "is not successful" do
         expect(subject).to_not be_successful
+      end
+
+      it "is aborted" do
+        expect(subject).to be_aborted
       end
     end
 
     context "when error is not set" do
-      it "returns false" do
+      before do
         subject.call!
+      end
+
+      it "is successful" do
         expect(subject).to be_successful
+      end
+
+      it "is not aborted" do
+        expect(subject).to_not be_aborted
       end
     end
   end

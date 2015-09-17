@@ -14,6 +14,10 @@ module Bizness::Operation
     error.nil?
   end
 
+  def aborted?
+    !successful?
+  end
+
   def to_h
     {}
   end
