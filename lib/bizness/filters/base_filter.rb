@@ -1,13 +1,17 @@
 module Bizness::Filters
   class BaseFilter < SimpleDelegator
+    attr_reader :__original_operation__
+
     def initialize(operation)
-      @__original_operation__ = operation if __original_operation__.nil?
+      @__original_operation__ = if operation.respond_to?(:__original_operation__)
+                                  operation.__original_operation__
+                                else
+                                  operation
+                                end
       super(operation)
     end
 
     private
-
-    attr_reader :__original_operation__
 
     def filtered_operation
       __getobj__
