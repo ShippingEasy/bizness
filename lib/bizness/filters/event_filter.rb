@@ -1,10 +1,8 @@
 module Bizness::Filters
   class EventFilter < Bizness::Filters::BaseFilter
     def call
-      Hey.context(namespace: event_name) do
-        Hey.publish!("executed", payload) do
-          evented_call
-        end
+      Hey.publish!("#{event_name}#{delimiter}executed", payload) do
+        evented_call
       end
     end
 
@@ -12,14 +10,14 @@ module Bizness::Filters
 
     def evented_call
       result = filtered_operation.call
-      Hey.publish!(successful? ? "succeeded" : "aborted", payload(result))
+      Hey.publish!("#{event_name}#{delimiter}#{successful? ? "succeeded" : "aborted"}", payload(result))
     rescue Exception => e
-      Hey.publish!("aborted", payload.merge(error: e.message, stacktrace: e.backtrace, exception: e.class.name))
+      Hey.publish!("#{event_name}#{delimiter}aborted", payload.merge(error: e.message, stacktrace: e.backtrace, exception: e.class.name))
       raise e
     end
 
     def event_name
-      __original_operation__.class.name.underscore.gsub("/", Hey.configuration.delimiter)
+      __original_operation__.class.name.underscore.gsub("/", delimiter)
     end
 
     def payload(result = nil)
@@ -30,6 +28,10 @@ module Bizness::Filters
       else
         Hash.new
       end
+    end
+
+    def delimiter
+      Hey.configuration.delimiter
     end
   end
 end
