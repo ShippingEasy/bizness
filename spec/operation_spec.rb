@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe Bizness::Operation do
+  let(:overrides) { [Bizness::Filters::EventFilter, Bizness::Filters::ActiveRecordTransactionFilter] }
+
   subject { MockOperation.new(foo: "bar") }
 
   before do
@@ -9,9 +11,23 @@ describe Bizness::Operation do
     end
   end
 
+  describe ".filters" do
+    before do
+      MockOperation.filters overrides
+    end
+
+    after do
+      MockOperation.filters nil
+    end
+
+    it "sets filter overrides" do
+      expect(MockOperation.filter_overrides).to eq(overrides)
+    end
+  end
+
   describe ".call!" do
     it "executes a filtered operation" do
-      expect(Bizness).to receive(:run).with(subject)
+      expect(Bizness).to receive(:run).with(subject, filters: [Bizness::Filters::EventFilter])
       subject.call!
     end
 
@@ -24,6 +40,21 @@ describe Bizness::Operation do
       allow(subject).to receive(:call).and_raise("Oops")
       subject.call!
       expect(subject.error).to eq("Oops")
+    end
+
+    context "with filter overrides" do
+      before do
+        MockOperation.filters overrides
+      end
+
+      after do
+        MockOperation.filters nil
+      end
+
+      it "executes a filtered operation with the overrides" do
+        expect(Bizness).to receive(:run).with(subject, filters: overrides)
+        subject.call!
+      end
     end
   end
 
