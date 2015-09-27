@@ -90,8 +90,15 @@ op.to_h
 
 Automatically publishing operations as events via the `EventFilter` is one of the primary reasons we developed Bizness. The `EventFilter` will always publish two events. For example, if your operation class is named `CompleteRegistrationOperation`, these events will be published:
 
+This event will always be published:
+
   * "operations:complete_registration:executed" - This event includes the start time, end time and duration of the operation
-  * "operations:complete_registration:succeeded" or "operations:complete_registration:aborted" depending on if an exception was raised or not
+  
+And additionally one of these events will be published as well:
+  
+  * "operations:complete_registration:succeeded" if the operation did not abort and an error was not set
+  * "operations:complete_registration:failed" if the operation did not abort, but an error was set manually
+  * "operations:complete_registration:aborted" if a runtime exception was thrown during the operation's execution
 
 #### Subscribing
 
