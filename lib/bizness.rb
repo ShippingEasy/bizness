@@ -2,6 +2,7 @@ require "bizness/version"
 require "active_record"
 require "forwardable"
 require "hey"
+require "i18n"
 
 module Bizness
   def self.configure
@@ -24,6 +25,7 @@ end
 
 require "bizness/configuration"
 require "bizness/operation"
+require "bizness/policy"
 require "bizness/subscriber"
 require "bizness/filters/base_filter"
 require "bizness/filters/active_record_transaction_filter"
