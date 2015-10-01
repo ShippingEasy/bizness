@@ -84,6 +84,63 @@ op.successful? # True if error is nil
 op.to_h
 ```
 
+### The Policy module
+
+Operations are expected to run to completion, otherwise a runtime error should be raised. Before executing an operation, you should generally ensure that the object or objects being operated against pass a certain set of criteria.
+
+We typically wrap this set of criteria in a Policy object, and if the object passes the policy we kick off the operation. You can call this policy during input validation and return the violations to the end user. However, we also like to use the policy object inside the operation as a final guard before running the operation. If the policy fails, we raise a runtime exception containing the list of violations.
+
+Since this is such a common pattern, we created the `Bizness::Policy` module. Here's an example:
+
+```ruby
+class StringFormatPolicy
+  include Bizness::Policy
+
+  attr_reader :string
+
+  def initialize(string:)
+    @string = string
+  end
+
+  private
+
+  def alphanumeric?
+    string.match(/^[[:alpha:]]+$/)
+  end
+
+  def all_caps?
+    string == string.upcase
+  end
+end
+
+policy = StringFormatPolicy.new(string: "abc123")
+policy.successful?
+#=> false
+
+policy.violations
+#=> ["String must be alphanumeric", "Characters must be all uppercase"]
+```
+
+By including the module, the object gets the `successful?` method which does the following when called:
+
+1. Introspects all private predicate methods (methods that end with a question mark) and executes them
+2. If the method returns false, it looks for a translation in an I18n YAML file
+3. It composes an 118n key using the policy's class and method name (without the question mark). For example: `policies.mock_policy.violations.all_caps`  
+4. It adds the result of the translation to the list of `violations`
+5. It returns false if any violations are found
+                                                                                                           
+An example I18n translation file looks like this:
+                                                                                                           
+```                                                                                                           
+# en.yml
+en:
+  policies:
+    mock_policy:
+      violations:
+        all_caps: "Characters must be all uppercase"
+        alphanumeric: "String must be alphanumeric"
+```
+
 ### Pubsub
 
 #### Publishing
