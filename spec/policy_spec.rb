@@ -3,7 +3,7 @@ require "spec_helper"
 describe Bizness::Policy do
   let(:string) { "Bar!" }
 
-  subject { MockPolicy.new(foo: string) }
+  subject { Mocks::MockPolicy.new(foo: string) }
 
   describe "#successful?" do
     context "when all predicates pass" do
@@ -32,7 +32,7 @@ describe Bizness::Policy do
 
   describe "#__requirements__" do
     it "returns a list of predicate methods" do
-      expect(MockPolicy.__requirements__).to match_array([:alphanumeric?, :all_caps?])
+      expect(Mocks::MockPolicy.__requirements__).to match_array([:alphanumeric?, :all_caps?])
     end
   end
 end

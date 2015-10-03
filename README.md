@@ -93,7 +93,7 @@ We typically wrap this set of criteria in a Policy object, and if the object pas
 Since this is such a common pattern, we created the `Bizness::Policy` module. Here's an example:
 
 ```ruby
-class StringFormatPolicy
+class Policies::StringFormatPolicy
   include Bizness::Policy
 
   attr_reader :string
@@ -113,7 +113,7 @@ class StringFormatPolicy
   end
 end
 
-policy = StringFormatPolicy.new(string: "abc123")
+policy = Policies::StringFormatPolicy.new(string: "abc123")
 policy.successful?
 #=> false
 
@@ -135,7 +135,7 @@ An example I18n translation file looks like this:
 # en.yml
 en:
   policies:
-    mock_policy:
+    string_format_policy:
       violations:
         all_caps: "Characters must be all uppercase"
         alphanumeric: "String must be alphanumeric"

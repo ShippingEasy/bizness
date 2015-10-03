@@ -1,5 +1,5 @@
 en:
-  policies:
+  mocks:
     mock_policy:
       violations:
         all_caps: "Characters must be all uppercase"

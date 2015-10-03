@@ -6,7 +6,7 @@
 #
 # -- string_format_policy.rb
 #
-# class StringFormatPolicy
+# class Policies::StringFormatPolicy
 #   include Bizness::Policy
 #
 #   def initialize(string)
@@ -58,9 +58,15 @@ module Bizness::Policy
 
   module ClassMethods
     def violation_message(method)
-      policy = self.name.gsub(/(.)([A-Z])/,'\1_\2').downcase
-      message_key = "policies.#{policy}.violations.#{method.to_s.delete("?")}"
+      message_key = "#{__violation_key_prefix__}.#{method.to_s.delete("?")}"
       I18n.t(message_key)
+    end
+
+    def __violation_key_prefix__
+      @__violation_key_prefix__ ||= begin
+        policy = self.name.gsub(/(.)([A-Z])/, '\1_\2').gsub("::_", ".").downcase
+        "#{policy}.violations"
+      end
     end
 
     def __requirements__
