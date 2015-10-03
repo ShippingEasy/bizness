@@ -33,8 +33,11 @@
 # Example usage:
 #
 # policy = StringFormatPolicy.new("abcd")
-# policy.successful?
+# policy.obeyed?
 # => false
+#
+# policy.violated?
+# => true
 #
 # policy.violations
 # => ["Must be an uppercase string"]
@@ -48,12 +51,16 @@ module Bizness::Policy
     @violations || []
   end
 
-  def successful?
+  def obeyed?
     self.violations = []
     self.class.__requirements__.each do |m|
       self.violations << self.class.violation_message(m) unless send(m)
     end
     violations.empty?
+  end
+
+  def violated?
+    !obeyed?
   end
 
   module ClassMethods

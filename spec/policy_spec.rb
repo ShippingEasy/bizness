@@ -5,12 +5,16 @@ describe Bizness::Policy do
 
   subject { Mocks::MockPolicy.new(foo: string) }
 
-  describe "#successful?" do
+  describe "#obeyed?, #violated?" do
     context "when all predicates pass" do
       let(:string) { "BAR" }
 
-      it "is successful?" do
-        expect(subject).to be_successful
+      it "is obeyed?" do
+        expect(subject).to be_obeyed
+      end
+
+      it "is not violated?" do
+        expect(subject).to_not be_violated
       end
 
       it "has no violations" do
@@ -20,12 +24,16 @@ describe Bizness::Policy do
 
     context "when a predicate fails" do
       it "adds a violation messages" do
-        subject.successful?
+        subject.obeyed?
         expect(subject.violations).to match_array(["String must be alphanumeric", "Characters must be all uppercase"])
       end
 
-      it "is not successful" do
-        expect(subject).to_not be_successful
+      it "is not obeyed" do
+        expect(subject).to_not be_obeyed
+      end
+
+      it "is violated" do
+        expect(subject).to be_violated
       end
     end
   end
