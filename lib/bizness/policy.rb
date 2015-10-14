@@ -64,6 +64,10 @@ module Bizness::Policy
   end
 
   module ClassMethods
+    def policy_enforces(*method_names)
+      @__requirements__ = method_names
+    end
+
     def violation_message(method)
       message_key = "#{__violation_key_prefix__}.#{method.to_s.delete("?")}"
       I18n.t(message_key)
@@ -77,9 +81,7 @@ module Bizness::Policy
     end
 
     def __requirements__
-      @__requirements__ ||= begin
-        private_instance_methods(false).select { |m| m.to_s[/\?$/] }
-      end
+      @__requirements__
     end
   end
 

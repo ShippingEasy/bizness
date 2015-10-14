@@ -5,6 +5,12 @@ describe Bizness::Policy do
 
   subject { Mocks::MockPolicy.new(foo: string) }
 
+  describe ".policy_enforces" do
+    it "sets the supplied methods as requirements on the policy" do
+      expect(Mocks::MockPolicy.__requirements__).to match_array([:alphanumeric?, :all_caps?])
+    end
+  end
+
   describe "#obeyed?, #violated?" do
     context "when all predicates pass" do
       let(:string) { "BAR" }
@@ -35,12 +41,6 @@ describe Bizness::Policy do
       it "is violated" do
         expect(subject).to be_violated
       end
-    end
-  end
-
-  describe "#__requirements__" do
-    it "returns a list of predicate methods" do
-      expect(Mocks::MockPolicy.__requirements__).to match_array([:alphanumeric?, :all_caps?])
     end
   end
 end
