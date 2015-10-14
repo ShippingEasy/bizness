@@ -1,6 +1,7 @@
 module Mocks
   class MockPolicy
     include Bizness::Policy
+    policy_enforces :alphanumeric?, :all_caps?
 
     attr_reader :foo
 
