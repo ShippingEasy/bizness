@@ -124,11 +124,11 @@ policy.violations
 #=> ["String must be alphanumeric", "Characters must be all uppercase"]
 ```
 
-By including the module, the object gets the `obeyed?` method which does the following when called:
+By including the module, the object gets the `violated?` (and `obeyed?`) method which does the following when called:
 
 1. Introspects all private predicate methods (methods that end with a question mark) and executes them
 2. If the method returns false, it looks for a translation in an I18n YAML file
-3. It composes an 118n key using the policy's class and method name (without the question mark). For example: `policies.mock_policy.violations.all_caps`  
+3. It composes an I18n key using the policy's class and method name (without the question mark). For example: `policies.mock_policy.violations.all_caps`  
 4. It adds the result of the translation to the list of `violations`
 5. It returns false if any violations are found
 
