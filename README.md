@@ -1,6 +1,6 @@
 # Bizness
 
-Get your bizness right and organize your business logic into operations.
+Get your bizness right and organize your business logic into operations and policies.
 
 ## Installation
 
