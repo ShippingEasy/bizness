@@ -88,7 +88,7 @@ op.to_h
 
 Operations are expected to run to completion, otherwise a runtime error should be raised. Before executing an operation, you should generally ensure that the object or objects being operated against pass a certain set of criteria.
 
-We typically wrap this set of criteria in a Policy object, and if the object passes the policy we kick off the operation. You can call this policy during input validation and return the violations to the end user. However, we also like to use the policy object inside the operation as a final guard before running the operation. If the policy fails, we raise a runtime exception containing the list of violations.
+We typically wrap this set of criteria in a Policy object, and if the object passes the policy we kick off the operation. You can also call this policy during input validation (for example, in a Form object) and return the violations to the end user. However, we also like to use the policy object inside the operation as a final guard before running the operation. If the policy fails, we raise a runtime exception containing the list of violations.
 
 Since this is such a common pattern, we created the `Bizness::Policy` module. Here's an example:
 
