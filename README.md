@@ -29,8 +29,8 @@ ShippingEasy adopted this strategy, but we opted to use the term Operation rathe
 
 As we wrote more and more operations, some insights emerged:
 
-  1. We always ran an operation in a transaction
-  2. An operation nearly always corresponded to an important system event ("Complete Registration")
+  1. We almost always ran an operation in a transaction
+  2. An operation often corresponded to an important system event ("Complete Registration")
   3. Logging these events into a dashboard like Kibana could provide us with valuable metrics and insight into how our system was performing at a business logic level
 
 Bizness, therefore, allows you to create PORO operation objects and easily augment their business logic execution via a series of filters. Out of the box there are filters to wrap every operation in a transaction as well as automatically broadcasting every operation as a series of events.
