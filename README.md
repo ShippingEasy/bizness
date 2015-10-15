@@ -98,13 +98,13 @@ class Policies::StringFormatPolicy
   
   policy_enforces :alphanumeric?, :all_caps?
 
-  attr_reader :string
-
   def initialize(string:)
     @string = string
   end
 
   private
+  
+  attr_reader :string
 
   def alphanumeric?
     string.match(/^[[:alpha:]]+$/)
