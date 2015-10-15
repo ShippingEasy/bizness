@@ -96,7 +96,7 @@ Since this is such a common pattern, we created the `Bizness::Policy` module. He
 class Policies::StringFormatPolicy
   include Bizness::Policy
   
-  policy_enforces :alphanumeric?, all_caps?
+  policy_enforces :alphanumeric?, :all_caps?
 
   attr_reader :string
 
