@@ -95,6 +95,8 @@ Since this is such a common pattern, we created the `Bizness::Policy` module. He
 ```ruby
 class Policies::StringFormatPolicy
   include Bizness::Policy
+  
+  policy_enforces :alphanumeric?, all_caps?
 
   attr_reader :string
 
@@ -126,7 +128,7 @@ policy.violations
 
 By including the module, the object gets the `violated?` (and `obeyed?`) method which does the following when called:
 
-1. Introspects all private predicate methods (methods that end with a question mark) and executes them
+1. Executes the methods listed via the `policy_enforces` macro
 2. If the method returns false, it looks for a translation in an I18n YAML file
 3. It composes an I18n key using the policy's class and method name (without the question mark). For example: `policies.mock_policy.violations.all_caps`  
 4. It adds the result of the translation to the list of `violations`
