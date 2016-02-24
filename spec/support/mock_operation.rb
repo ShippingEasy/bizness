@@ -10,6 +10,7 @@ class MockOperation
 
   def call
     self.custom_message = "Operation completed"
+    "MOCK RETURN VALUE"
   end
 
   def to_h
