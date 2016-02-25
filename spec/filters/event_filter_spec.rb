@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Bizness::Filters::EventFilter do
-  let(:op) { op = MockOperation.new(foo: "bar") }
+  let(:op) { MockOperation.new(foo: "bar") }
   subject(:filter) { Bizness::Filters::EventFilter.new(op) }
 
   it "publishes an executed event" do
@@ -9,36 +9,52 @@ describe Bizness::Filters::EventFilter do
     filter.call
   end
 
-  context "when succeeded" do
-    before do
-      allow(op).to receive(:successful?).and_return(true)
+  context "when responds to :successful?" do
+    context "when succeeded" do
+      before do
+        allow(op).to receive(:successful?).and_return(true)
+      end
+
+      it "publishes a succeeded event" do
+        expect(Hey).to receive(:publish!).once.with("mock_operation:executed", {foo: "bar"}).and_call_original
+        expect(Hey).to receive(:publish!).once.with("mock_operation:succeeded", {foo: "bar", custom_message: "Operation completed"})
+        filter.call
+      end
+
+      it "propagates the return value of the operation" do
+        expect(filter.call).to eq("MOCK RETURN VALUE")
+      end
     end
 
-    it "publishes a succeeded event" do
-      expect(Hey).to receive(:publish!).once.with("mock_operation:executed", {foo: "bar"}).and_call_original
-      expect(Hey).to receive(:publish!).once.with("mock_operation:succeeded", {foo: "bar", custom_message: "Operation completed"})
-      filter.call
-    end
+    context "when failed" do
+      before do
+        allow(op).to receive(:successful?).and_return(false)
+      end
 
-    it "propagates the return value of the operation" do
-      expect(filter.call).to eq("MOCK RETURN VALUE")
+      it "publishes a failed event" do
+        expect(Hey).to receive(:publish!).once.with("mock_operation:executed", {foo: "bar"}).and_call_original
+        expect(Hey).to receive(:publish!).once.with("mock_operation:failed", hash_including({foo: "bar"}))
+        filter.call
+      end
+
+      it "propagates the return value of the operation" do
+        expect(filter.call).to eq("MOCK RETURN VALUE")
+      end
     end
   end
 
-  context "when failed" do
-    before do
-      allow(op).to receive(:successful?).and_return(false)
-    end
+  context "when operation does not respond to :successful?" do
+    let(:op) { ->{ "RETURN VALUE" } }
 
-    it "publishes a failed event" do
-      expect(Hey).to receive(:publish!).once.with("mock_operation:executed", {foo: "bar"}).and_call_original
-      expect(Hey).to receive(:publish!).once.with("mock_operation:failed", hash_including({foo: "bar"}))
-      filter.call
-    end
+      it "publishes a succeeded event" do
+        expect(Hey).to receive(:publish!).once.with("proc:executed", {}).and_call_original
+        expect(Hey).to receive(:publish!).once.with("proc:succeeded", {})
+        filter.call
+      end
 
-    it "propagates the return value of the operation" do
-      expect(filter.call).to eq("MOCK RETURN VALUE")
-    end
+      it "propagates the return value of the operation" do
+        expect(filter.call).to eq("RETURN VALUE")
+      end
   end
 
   context "when aborted" do
